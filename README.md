@@ -42,3 +42,8 @@ Since the project requires avoiding using server-side code, the project is built
 
 1. Once entered the Login page, clicking the "Login" button will generate a secret phrase and store it in the cookie. Then, users will be redirected to the Home page.
 2. On the Home page, users will see another button called "Go to special page". Clicking this button will redirect users to the Special page while checking the secret phrase in the cookie. If the secret phrase is correct, users will be able to see the content of the Special page. Otherwise, users will be redirected to the Login page.
+
+## Alternatives
+
+1. Using sesson with `@sidebase/nuxt-session` to store the secret phrase.
+2. Caching "screatphrase.txt" file in the server-side.
