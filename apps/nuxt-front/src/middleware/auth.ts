@@ -4,12 +4,13 @@ export default defineNuxtRouteMiddleware((to) => {
   const storedSecretPhrase = useCookie('secretPhraseKey');
   const hardcodedSecretPhrase = storedSecretPhrase.value;
 
-  console.log('Secret phrase:', secretPhraseCookie);
+  console.log('Secret phrase:', secretPhraseCookie.value);
   console.log('Hardcoded secret phrase:', hardcodedSecretPhrase);
 
   if (
-    to.path !== '/login' &&
-    secretPhraseCookie.value !== hardcodedSecretPhrase &&
+    (to.path !== '/login' &&
+      secretPhraseCookie.value !== hardcodedSecretPhrase) ||
+    secretPhraseCookie.value === undefined ||
     secretPhraseCookie.value === undefined
   ) {
     return navigateTo('/login');
