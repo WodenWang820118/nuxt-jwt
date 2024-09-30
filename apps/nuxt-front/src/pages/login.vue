@@ -2,8 +2,7 @@
 <template>
   <div class="login">
     <h1>Login Page</h1>
-    <UButton label="Login" @click="handleButtonClick" />
-    <!-- <UModal>
+    <UModal v-model="showModal">
       <UCard>
         <template #header>
           <h3 class="text-lg font-semibold">Modal Title</h3>
@@ -18,7 +17,7 @@
           <UButton label="Login" @click="handleButtonClick" />
         </div>
       </UCard>
-    </UModal> -->
+    </UModal>
   </div>
 </template>
 
