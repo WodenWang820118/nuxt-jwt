@@ -8,7 +8,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['auth', 'check-access'],
+  middleware: ['check-access'],
 });
 </script>
 <style scoped>

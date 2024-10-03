@@ -3,9 +3,7 @@ import { LoginResponse, LoginCheckResponse } from '../utils/user.interface';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
-  const isFirstLogin = ref(true);
   const isAuthenticated = ref(false);
-  const secretPhrase = ref(undefined);
 
   async function login(email: string, password: string) {
     try {
@@ -42,6 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
       });
       if (response.isLoggedIn && response.user) {
         user.value = response.user;
+        console.log('Fetched User: ', user.value);
         isAuthenticated.value = true;
       } else {
         user.value = null;
@@ -54,13 +53,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function isAuthorizedToSpecialPage() {
+    return (
+      user.value?.rolePermission?.user?.includes('readSpecialPage') ?? false
+    );
+  }
+
   return {
-    isFirstLogin,
-    secretPhrase,
     isAuthenticated,
     user,
     login,
     logout,
     fetchUser,
+    isAuthorizedToSpecialPage,
   };
 });
