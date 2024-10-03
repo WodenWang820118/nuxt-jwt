@@ -1,4 +1,6 @@
-# Eaglys
+# Authorization Flow with JWT
+
+This project implements a JWT-based authentication and authorization system. The flow is designed to manage user access to a home page and a special page with additional permissions.
 
 ## Table of Contents
 
@@ -6,8 +8,7 @@
 - [Pre-requisites](#pre-requisites)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Architecture and workflow](#architecture-and-workflow)
-- [Alternatives](#alternatives)
+- [Architecture](#architecture)
 
 ## Requirements
 
@@ -41,16 +42,16 @@ pnpm install
 pnpm run start
 ```
 
-# Architecture and workflow
+# Architecture
 
-### Technology Stack
+## Technology Stack
 
 - NuxtJS: A powerful Vue.js framework for building modern web applications
 - NuxtUI: A UI library for Nuxt applications
 - TypeScript: Adds static typing to enhance code quality and developer experience
 - Pinia: State management for Vue applications
 
-### Project Structure
+## Project Structure
 
 The project follows the Nx monorepo structure for better scalability and maintainability. This approach offers:
 
@@ -58,21 +59,30 @@ The project follows the Nx monorepo structure for better scalability and maintai
 2. Automated dependency management
 3. TypeScript support with auto-generated configuration files
 
-### Authentication Flow
+## State Machine Overview
 
-1. Login Page: Users click the "Login" button to generate a secret phrase, which is securely stored in a cookie.
-2. Home Page: Users can access the "Go to special page" button.
-3. Special Page: The application checks the secret phrase in the cookie before granting access.
+![state machine](docs/jwt.drawio.png)
 
-### Data Storage
+## Key States and Transitions
 
-To simulate file operations without server-side code, the project uses two cookies:
+1. **Credential Validation**
 
-1. User session cookie
-2. Encrypted secret phrase cookie
+   - **Login Attempt**: Users provide credentials to log in.
+   - **Validate Credentials**: The system checks the provided credentials.
+     - **Credential Invalid**: If credentials are incorrect, access is denied.
+     - **Credential Validated**: If credentials are correct, proceed to generate a JWT.
 
-## Alternatives
+2. **JWT Generation**
 
-1. Using sesson with `@sidebase/nuxt-session` to store the secret phrase.
-2. Caching "screatphrase.txt" file in the server-side.
-3. Using [localStorage](https://nuxt.com/modules/storage) would be possible but the library is not compatible with Nuxt3 yet.
+   - **Generate JWT**: A JWT is created for the authenticated user, including user permissions.
+   - **Logged In**: The user is now authenticated and can access the home page.
+
+3. **Home Page Access**
+
+   - Users with a valid JWT can access the home page without additional checks.
+
+4. **Special Page Validation**
+   - **Access Special Page**: Users attempt to access a page requiring special permissions.
+   - **Validate JWT via HTTP-only Cookie**: The system checks the JWT for necessary permissions.
+     - **Permission Invalid**: If permissions are insufficient, access is denied.
+     - **Permission Validated**: If permissions are valid, access to the special page is granted.

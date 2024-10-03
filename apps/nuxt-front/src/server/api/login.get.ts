@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     // Verify the JWT token
     const payload = verifyJWT(token); // Implement this function
     // If the token is valid, return the user information
-    console.log('Payload:', payload);
+    console.log('Payload when fetching user:', payload);
     return {
       isLoggedIn: true,
       user: payload,
