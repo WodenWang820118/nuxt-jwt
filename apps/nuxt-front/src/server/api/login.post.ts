@@ -1,21 +1,24 @@
 import { LoginRequest, LoginResponse } from '../../utils/user.interface';
 import { generateJWT } from '../../utils/jwt';
 import { createError, defineEventHandler, readBody, setCookie } from 'h3';
+import { UserService } from './../../services/userService';
+
+const userService = new UserService();
 
 export default defineEventHandler(async (event) => {
   try {
     const { email, password }: LoginRequest = await readBody(event);
-    const rolePermission = {
-      user: ['readSpecialPage'],
-    };
-    const payload = {
-      id: '123',
-      email,
-      rolePermission,
-    };
     // Validate credentials and generate JWT token
     // This is where you'd typically check against a database
     if (email === 'user@example.com' && password === 'password') {
+      const userId = userService.getUserId(email);
+      const rolePermission = userService.getRolePermission(email);
+      const payload = {
+        id: userId,
+        email,
+        rolePermission,
+      };
+      console.log('Payload to be logged in:', payload);
       const token = generateJWT(payload);
       // Set HTTP-only cookie
       setCookie(event, 'auth_token', token, {
