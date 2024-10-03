@@ -59,12 +59,11 @@ const state = reactive({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     const validatedData = schema.parse(state);
-    await authStore.login(validatedData.email, validatedData.password);
-    if (authStore.isFirstLogin) {
-      await router.push('/home');
-    } else if (authStore.user !== null) {
+    if (await authStore.fetchUser()) {
       await router.push('/home');
     }
+    await authStore.login(validatedData.email, validatedData.password);
+    await router.push('/home');
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error('Validation error:', error.errors);
