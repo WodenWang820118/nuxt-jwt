@@ -56,27 +56,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   function generateSecretPhrase() {
     // Generate a random secret phrase
-    // secretPhrase.value = Math.random().toString(36).substring(2, 15);
-    // isFirstLogin.value = false;
-    // // Store the secret phrase in a cookie
-    // secretPhraseCookie.value = secretPhrase.value;
-    // storedSecretPhrase.value = secretPhrase.value;
-  }
-
-  async function verifySecretPhrase() {
-    // const secret = secretPhraseCookie.value;
-    // if (secret) {
-    //   // Validate the secret phrase
-    //   const response = await $fetch<User>(`/api/verify-secret`, {
-    //     method: 'POST',
-    //     body: { secret },
-    //     credentials: 'include',
-    //   });
-    //   user.value = response;
-    //   isFirstLogin.value = false;
-    // } else {
-    //   throw new Error('Secret phrase not found');
-    // }
+    secretPhrase.value = Math.random().toString(36).substring(2, 15);
+    isFirstLogin.value = false;
+    // Store the secret phrase in a cookie
   }
 
   return {
@@ -88,6 +70,5 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     fetchUser,
     generateSecretPhrase,
-    verifySecretPhrase,
   };
 });

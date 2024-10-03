@@ -27,4 +27,5 @@ export default defineNuxtConfig({
   routeRules: {
     '/login': { prerender: true },
   },
+  ssr: false,
 });

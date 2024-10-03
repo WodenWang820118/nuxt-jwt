@@ -64,8 +64,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     authStore.generateSecretPhrase();
     await router.push('/home');
   } else {
-    // await authStore.verifySecretPhrase();
-    await router.push('/home');
+    if (authStore.user !== null) {
+      await router.push('/home');
+    }
   }
 }
 </script>
