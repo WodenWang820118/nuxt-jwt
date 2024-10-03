@@ -54,13 +54,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  function generateSecretPhrase() {
-    // Generate a random secret phrase
-    secretPhrase.value = Math.random().toString(36).substring(2, 15);
-    isFirstLogin.value = false;
-    // Store the secret phrase in a cookie
-  }
-
   return {
     isFirstLogin,
     secretPhrase,
@@ -69,6 +62,5 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     fetchUser,
-    generateSecretPhrase,
   };
 });

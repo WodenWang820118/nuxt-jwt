@@ -61,7 +61,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const validatedData = schema.parse(state);
     await authStore.login(validatedData.email, validatedData.password);
     if (authStore.isFirstLogin) {
-      authStore.generateSecretPhrase();
       await router.push('/home');
     } else if (authStore.user !== null) {
       await router.push('/home');

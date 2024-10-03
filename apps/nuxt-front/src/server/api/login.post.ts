@@ -5,15 +5,18 @@ import { createError, defineEventHandler, readBody, setCookie } from 'h3';
 export default defineEventHandler(async (event) => {
   try {
     const { email, password }: LoginRequest = await readBody(event);
-
+    const rolePermission = {
+      user: ['readSpecialPage'],
+    };
+    const payload = {
+      id: '123',
+      email,
+      rolePermission,
+    };
     // Validate credentials and generate JWT token
     // This is where you'd typically check against a database
     if (email === 'user@example.com' && password === 'password') {
-      const token = generateJWT({
-        id: '123',
-        email,
-      });
-      console.log('Generated token:', token);
+      const token = generateJWT(payload);
       // Set HTTP-only cookie
       setCookie(event, 'auth_token', token, {
         httpOnly: true,
@@ -21,7 +24,7 @@ export default defineEventHandler(async (event) => {
         maxAge: 60 * 60 * 24 * 7, // 1 week
         path: '/',
       });
-      console.log('Login successful:', email);
+      console.log('Login successful:', payload);
       return { user: { id: '123', email } } as LoginResponse;
     }
 

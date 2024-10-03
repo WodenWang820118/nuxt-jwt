@@ -7,16 +7,9 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '../stores/auth';
-import { navigateTo } from '#app';
-
-const authStore = useAuthStore();
-
-// On component mount, check authentication
-if (!authStore.isAuthenticated()) {
-  // If not authenticated, redirect to login
-  navigateTo('/login');
-}
+definePageMeta({
+  middleware: ['auth', 'check-access'],
+});
 </script>
 <style scoped>
 .special {

@@ -1,6 +1,10 @@
 export interface User {
   id?: string;
   email?: string;
+  rolePermission?: {
+    user?: string[];
+    admin?: string[];
+  };
 }
 
 export interface LoginCheckResponse {
