@@ -9,36 +9,70 @@
         </template>
 
         <div class="p-4">
-          <p class="mb-4">We're generating a secretphrase.txt</p>
-          <p class="mb-4">
-            You'll be using the authorized key information within the file
-          </p>
+          <p class="mb-4">Secret phrase will be generated after logging in.</p>
 
-          <UButton label="Login" @click="handleButtonClick" />
+          <UForm
+            :schema="schema"
+            :state="state"
+            class="space-y-4"
+            @submit="onSubmit"
+          >
+            <UFormGroup label="Email" name="email">
+              <UInput v-model="state.email" />
+            </UFormGroup>
+
+            <UFormGroup label="Password" name="password">
+              <UInput v-model="state.password" type="password" />
+            </UFormGroup>
+
+            <UButton type="submit"> Login </UButton>
+          </UForm>
         </div>
       </UCard>
     </UModal>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../stores/auth';
+import { z } from 'zod';
+import { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types/form';
 
 const authStore = useAuthStore();
 const router = useRouter();
 const showModal = ref(true);
 
-function handleButtonClick() {
-  // Simulate first login
-  if (authStore.isFirstLogin) {
-    authStore.generateSecretPhrase();
-    showModal.value = false;
-    router.push('/home');
-  } else {
-    authStore.verifySecretPhrase();
-    router.push('/home');
+const schema = z.object({
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Must be at least 8 characters'),
+});
+
+type Schema = z.output<typeof schema>;
+
+const state = reactive({
+  email: 'user@example.com',
+  password: 'password',
+});
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  try {
+    const validatedData = schema.parse(state);
+    await authStore.login(validatedData.email, validatedData.password);
+    if (authStore.isFirstLogin) {
+      await router.push('/home');
+    } else if (authStore.user !== null) {
+      await router.push('/home');
+    }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Validation error:', error.errors);
+      // Handle validation errors (e.g., show error messages to the user)
+    } else {
+      console.error('Login error:', error);
+      // Handle other errors (e.g., show a generic error message)
+    }
   }
 }
 </script>
