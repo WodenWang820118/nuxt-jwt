@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import { z } from 'zod';
@@ -57,15 +57,22 @@ const state = reactive({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with data
-  await authStore.login(state.email, state.password);
-  console.log(event.data);
-  if (authStore.isFirstLogin) {
-    authStore.generateSecretPhrase();
-    await router.push('/home');
-  } else {
-    if (authStore.user !== null) {
+  try {
+    const validatedData = schema.parse(state);
+    await authStore.login(validatedData.email, validatedData.password);
+    if (authStore.isFirstLogin) {
+      authStore.generateSecretPhrase();
       await router.push('/home');
+    } else if (authStore.user !== null) {
+      await router.push('/home');
+    }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Validation error:', error.errors);
+      // Handle validation errors (e.g., show error messages to the user)
+    } else {
+      console.error('Login error:', error);
+      // Handle other errors (e.g., show a generic error message)
     }
   }
 }

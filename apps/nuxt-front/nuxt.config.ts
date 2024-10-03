@@ -28,4 +28,11 @@ export default defineNuxtConfig({
     '/login': { prerender: true },
   },
   ssr: false,
+  sourcemap: {
+    server: true,
+    client: true,
+  },
+  features: {
+    devLogs: true, // or 'silent' to handle logs yourself
+  },
 });

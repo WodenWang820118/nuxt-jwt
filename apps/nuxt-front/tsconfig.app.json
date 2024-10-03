@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true
+    "composite": true,
+    "module": "CommonJS",
+    "esModuleInterop": true
   },
   "include": [".nuxt/nuxt.d.ts", "src/**/*"],
   "exclude": []

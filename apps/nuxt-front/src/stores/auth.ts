@@ -1,27 +1,19 @@
-// stores/authStore.ts
 import { defineStore } from 'pinia';
-import { LoginResponse } from '../server/api/login.post';
+import { LoginResponse, LoginCheckResponse } from '../utils/user.interface';
 
 export const useAuthStore = defineStore('auth', () => {
-  // Use cookies
-  // const secretPhraseCookie = useCookie('secretPhrase');
-  // const storedSecretPhrase = useCookie('secretPhraseKey');
   const user = ref<User | null>(null);
   const isFirstLogin = ref(true);
   const isAuthenticated = ref(false);
   const secretPhrase = ref(undefined);
 
   async function login(email: string, password: string) {
-    console.log('Logging in...');
-    console.log('Email:', email);
-    console.log('Password:', password);
     try {
       const response = await $fetch<LoginResponse>(`/api/login`, {
         method: 'POST',
         body: { email, password },
         credentials: 'include',
       });
-      console.log('Login successful:', response);
       user.value = response.user;
     } catch (error) {
       console.error('Login failed', error);
@@ -44,13 +36,21 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUser() {
     try {
-      const response = await $fetch<LoginResponse>(`/api/login`, {
+      const response = await $fetch<LoginCheckResponse>(`/api/login`, {
+        method: 'GET',
         credentials: 'include',
       });
-      user.value = response.user;
+      if (response.isLoggedIn && response.user) {
+        user.value = response.user;
+        isAuthenticated.value = true;
+      } else {
+        user.value = null;
+      }
+      return response.isLoggedIn;
     } catch (error) {
       console.error(error);
       user.value = null;
+      return false;
     }
   }
 
