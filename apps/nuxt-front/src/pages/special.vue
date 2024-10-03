@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../stores/auth';
 import { navigateTo } from '#app';
 
 const authStore = useAuthStore();

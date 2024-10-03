@@ -19,12 +19,12 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
-
   css: [],
-
   vite: {
     plugins: [nxViteTsPaths()],
   },
-
   modules: ['@pinia/nuxt', '@nuxt/ui'],
+  routeRules: {
+    '/login': { prerender: true },
+  },
 });
