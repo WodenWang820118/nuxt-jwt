@@ -21,6 +21,13 @@ This project implements a JWT-based authentication and authorization system. The
 
 - Node.js (version 18.x or higher); The project uses v22.8.0
 - pnpm (version 9.10.0)
+- .env file at the root directory with the following content:
+
+```.env
+JWT_SECRET=secretPhrase
+```
+
+Otherwise, it uses `secretPhrase` as the default secret phrase.
 
 ## Installation
 

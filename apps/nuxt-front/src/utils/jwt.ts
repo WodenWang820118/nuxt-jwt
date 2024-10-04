@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'secretPhrase';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function generateJWT(payload: any): string {
