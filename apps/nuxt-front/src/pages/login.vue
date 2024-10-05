@@ -2,7 +2,7 @@
 <template>
   <div class="login">
     <h1>Login Page</h1>
-    <UModal v-model="showModal">
+    <UModal v-model="showModal" prevent-close>
       <UCard>
         <template #header>
           <h3 class="text-lg font-semibold">Login</h3>
